@@ -10,15 +10,30 @@ uses
 type
   TConfiguracoes = class(TInterfacedObject, IConfiguracoes)
   private
-    FPath: String;
-    FIni: TIniFile;
-
     FCertificado: ICertificado;
     FWebService: IWebService;
     FArquivo: IArquivo;
+    FSSLLib: Integer;
+    FSSLCryptLib: Integer;
+    FSSLHttpLib: Integer;
+    FSSLXmlSignLib: Integer;
+    FSSLType: Integer;
+    FAtualizarXMLCancelado: Boolean;
+    FSalvar: Boolean;
+    FExibirErroSchema: Boolean;
+    FRetirarAcentos: Boolean;
+    FFormatoAlerta: String;
+    FFormaEmissao: Integer;
+    FModeloDF: Integer;
+    FVersaoDF: Integer;
+    FIdCSC: String;
+    FCSC: String;
+    FVersaoQRCode: Integer;
+    FTipoDANFE: Integer;
+    FLogo: String;
+    FPathPDF: String;
 
     constructor Create;
-    destructor Destroy; override;
   public
     class function New: IConfiguracoes;
 
@@ -63,7 +78,6 @@ type
     function PathPDF: String; overload;
     function WebService: IWebService;
     function Arquivo: IArquivo;
-    function Infra: TIniFile;
   end;
 
 implementation
@@ -83,12 +97,12 @@ end;
 function TConfiguracoes.AtualizarXMLCancelado(Value: Boolean): IConfiguracoes;
 begin
   Result := Self;
-  FIni.WriteBool('Configuracoes', 'AtualizarXMLCancelado',Value);
+  FAtualizarXMLCancelado := Value;
 end;
 
 function TConfiguracoes.AtualizarXMLCancelado: Boolean;
 begin
-  FIni.ReadBool('Configuracoes', 'AtualizarXMLCancelado', Result);
+  Result := FAtualizarXMLCancelado;
 end;
 
 function TConfiguracoes.Certificado: ICertificado;
@@ -100,96 +114,102 @@ end;
 
 constructor TConfiguracoes.Create;
 begin
-  FPath := IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0)))+'conf.ini';
-  FIni := TIniFile.Create(FPath);
+  FSSLLib := 0;
+  FSSLCryptLib := 0;
+  FSSLHttpLib := 0;
+  FSSLXmlSignLib := 0;
+  FSSLType := 0;
+  FAtualizarXMLCancelado := False;
+  FSalvar := False;
+  FExibirErroSchema := false;
+  FRetirarAcentos := false;
+  FFormatoAlerta := '';
+  FFormaEmissao := 0;
+  FModeloDF := 0;
+  FVersaoDF := 0;
+  FIdCSC := '';
+  FCSC := '';
+  FVersaoQRCode := 0;
+  FTipoDANFE := 0;
+  FLogo := '';
+  FPathPDF := '';
 end;
 
 function TConfiguracoes.CSC: String;
 begin
-  Result := '';//FIni.ReadString('Configuracoes', 'CSC', Result);
-end;
-
-destructor TConfiguracoes.Destroy;
-begin
-  FIni.Free;
-  inherited;
+  Result := FCSC;
 end;
 
 function TConfiguracoes.CSC(Value: String): IConfiguracoes;
 begin
   Result := Self;
-  FIni.WriteString('Configuracoes', 'CSC',Value);
+  FCSC := VAlue;
 end;
 
 function TConfiguracoes.ExibirErroSchema(Value: Boolean): IConfiguracoes;
 begin
   Result := Self;
-  FIni.WriteBool('Configuracoes', 'ExibirErroSchema',Value);
+  FExibirErroSchema := Value;
 end;
 
 function TConfiguracoes.ExibirErroSchema: Boolean;
 begin
-  Result := True;//FIni.ReadBool('Configuracoes', 'ExibirErroSchema', Result);
+  Result := FExibirErroSchema;
 end;
 
 function TConfiguracoes.FormaEmissao(Value: Integer): IConfiguracoes;
 begin
   Result := Self;
-  FIni.WriteInteger('Configuracoes', 'FormaEmissao',Value);
+  FFormaEmissao := VAlue;
 end;
 
 function TConfiguracoes.FormaEmissao: Integer;
 begin
-  FIni.ReadInteger('Configuracoes', 'FormaEmissao', Result);
+  Result := FFormaEmissao;
 end;
 
 function TConfiguracoes.FormatoAlerta(Value: String): IConfiguracoes;
 begin
   Result := Self;
-  FIni.WriteString('Configuracoes', 'FormatoAlerta',Value);
+  FFormatoAlerta := Value;
 end;
 
 function TConfiguracoes.FormatoAlerta: String;
 begin
-  Result := 'TAG:%TAGNIVEL% ID:%ID%/%TAG%(%DESCRICAO%) - %MSG%.';FIni.ReadString('Configuracoes', 'FormatoAlerta', Result);
+  Result := FFormatoAlerta;
 end;
 
 function TConfiguracoes.IdCSC: String;
 begin
-  Result := '';//FIni.ReadString('Configuracoes', 'IdCSC', Result);
-end;
-
-function TConfiguracoes.Infra: TIniFile;
-begin
-  Result := FIni;
+  Result := FIdCSC;
 end;
 
 function TConfiguracoes.IdCSC(Value: String): IConfiguracoes;
 begin
   Result := Self;
-  FIni.WriteString('Configuracoes', 'IdCSC',Value);
+  FIdCSC := Value;
 end;
 
 function TConfiguracoes.Logo(Value: String): IConfiguracoes;
 begin
   Result := Self;
-  FIni.WriteString('Configuracoes', 'Logo',Value);
+  FLogo := Value;
 end;
 
 function TConfiguracoes.Logo: String;
 begin
-  Result := '';//FIni.ReadString('Configuracoes', 'Logo', Result);
+  Result := FLogo;
 end;
 
 function TConfiguracoes.ModeloDF: Integer;
 begin
-  Result := 1;//FIni.ReadInteger('Configuracoes', 'ModeloDF', Result);
+  Result := FModeloDF;
 end;
 
 function TConfiguracoes.ModeloDF(Value: Integer): IConfiguracoes;
 begin
   Result := Self;
-  FIni.WriteInteger('Configuracoes', 'ModeloDF',Value);
+  FModeloDF := Value;
 end;
 
 class function TConfiguracoes.New: IConfiguracoes;
@@ -199,123 +219,123 @@ end;
 
 function TConfiguracoes.PathPDF: String;
 begin
-  Result := '';//FIni.ReadString('Configuracoes', 'PathPDF', Result);
+  Result := FPathPDF;
 end;
 
 function TConfiguracoes.PathPDF(Value: String): IConfiguracoes;
 begin
   Result := Self;
-  FIni.WriteString('Configuracoes', 'PathPDF',Value);
+  FPathPDF := Value;
 end;
 
 function TConfiguracoes.RetirarAcentos: Boolean;
 begin
-  Result := True;//FIni.ReadBool('Configuracoes', 'RetirarAcentos', Result);
+  Result := FRetirarAcentos;
 end;
 
 function TConfiguracoes.RetirarAcentos(Value: Boolean): IConfiguracoes;
 begin
   Result := Self;
-  FIni.WriteBool('Configuracoes', 'RetirarAcentos',Value);
+  FRetirarAcentos := Value;
 end;
 
 function TConfiguracoes.Salvar(Value: Boolean): IConfiguracoes;
 begin
   Result := Self;
-  FIni.WriteBool('Configuracoes', 'Salvar',Value);
+  FSalvar := Value;
 end;
 
 function TConfiguracoes.Salvar: Boolean;
 begin
-  Result := True;//FIni.ReadBool('Configuracoes', 'Salvar', Result);
+  Result := FSalvar;
 end;
 
 function TConfiguracoes.SSLCryptLib: Integer;
 begin
-  Result := 3;//FIni.ReadInteger('Configuracoes', 'SSLHttpLib', Result);
+  Result := FSSLCryptLib;
 end;
 
 function TConfiguracoes.SSLCryptLib(Value: Integer): IConfiguracoes;
 begin
   Result := Self;
-  FIni.WriteInteger('Configuracoes', 'SSLCryptLib',Value);
+  FSSLCryptLib := Value;
 end;
 
 function TConfiguracoes.SSLHttpLib: Integer;
 begin
-  Result := 2;//FIni.ReadInteger('Configuracoes', 'SSLHttpLib', Result);
+  Result := FSSLHttpLib;
 end;
 
 function TConfiguracoes.SSLHttpLib(Value: Integer): IConfiguracoes;
 begin
   Result := Self;
-  FIni.WriteInteger('Configuracoes', 'SSLHttpLib',Value);
+  FSSLHttpLib := Value;
 end;
 
 function TConfiguracoes.SSLLib(Value: Integer): IConfiguracoes;
 begin
   Result := Self;
-  FIni.WriteInteger('Configuracoes', 'SSLLib',Value);
+  FSSLLib := Value;
 end;
 
 function TConfiguracoes.SSLLib: Integer;
 begin
-  Result := 4;//FIni.ReadInteger('Configuracoes', 'SSLLib', Result);
+  Result := FSSLLib;
 end;
 
 function TConfiguracoes.SSLType: Integer;
 begin
-  FIni.ReadInteger('Configuracoes', 'SSLType', Result);
+  Result := FSSLType;
 end;
 
 function TConfiguracoes.SSLType(Value: Integer): IConfiguracoes;
 begin
   Result := Self;
-  FIni.WriteInteger('Configuracoes', 'SSLType',Value);
+  FSSLType := Value;
 end;
 
 function TConfiguracoes.SSLXmlSignLib: Integer;
 begin
- Result := 4;//FIni.ReadInteger('Configuracoes', 'SSLXmlSignLib', Result);
+ Result := FSSLXmlSignLib;
 end;
 
 function TConfiguracoes.SSLXmlSignLib(Value: Integer): IConfiguracoes;
 begin
   Result := Self;
-  FIni.WriteInteger('Configuracoes', 'SSLXmlSignLib',Value);
+  FSSLXmlSignLib := Value;
 end;
 
 function TConfiguracoes.TipoDANFE: Integer;
 begin
-  Result :=1;//FIni.ReadInteger('Configuracoes', 'TipoDANFE', Result);
+  Result := FTipoDANFE;
 end;
 
 function TConfiguracoes.TipoDANFE(Value: Integer): IConfiguracoes;
 begin
   Result := Self;
-  FIni.WriteInteger('Configuracoes', 'TipoDANFE',Value);
+  FTipoDANFE := Value;
 end;
 
 function TConfiguracoes.VersaoDF: Integer;
 begin
-  Result := 3;//FIni.ReadInteger('Configuracoes', 'VersaoDF', Result);
+  Result := FVersaoDF;
 end;
 
 function TConfiguracoes.VersaoDF(Value: Integer): IConfiguracoes;
 begin
   Result := Self;
-  FIni.WriteInteger('Configuracoes', 'VersaoDF',Value);
+  FVersaoDF := Value;
 end;
 
 function TConfiguracoes.VersaoQRCode(Value: Integer): IConfiguracoes;
 begin
   Result := Self;
-  FIni.WriteInteger('Configuracoes', 'VersaoQRCode',Value);
+  FVersaoQRCode := Value;
 end;
 
 function TConfiguracoes.VersaoQRCode: Integer;
 begin
-  Result := 2;//FIni.ReadInteger('Configuracoes', 'VersaoQRCode', Result);
+  Result := FVersaoQRCode;
 end;
 
 function TConfiguracoes.WebService: IWebService;

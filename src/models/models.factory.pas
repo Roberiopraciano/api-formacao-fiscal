@@ -11,6 +11,8 @@ type
     FConfiguracoes: IConfiguracoes;
     FIde: IIde;
     FEmitente: IEmitente;
+
+    constructor Create;
   public
     class function New: IFactoryModels;
 
@@ -27,22 +29,23 @@ uses
 
 function TFactoryModels.Configuracoes: IConfiguracoes;
 begin
-  if not Assigned(FConfiguracoes) then
-    FConfiguracoes := TConfiguracoes.new;
   Result := FConfiguracoes;
+end;
+
+constructor TFactoryModels.Create;
+begin
+  FConfiguracoes := TConfiguracoes.new;
+  FEmitente := TEmitente.NEw;
+  FIde := TIde.new;
 end;
 
 function TFactoryModels.Emitente: IEmitente;
 begin
-  if not Assigned(FEmitente) then
-    FEmitente := TEmitente.NEw;
   Result := FEmitente;
 end;
 
 function TFactoryModels.Ide: IIde;
 begin
-  if not Assigned(FIde) then
-    FIde := TIde.new;
   Result := FIde;
 end;
 

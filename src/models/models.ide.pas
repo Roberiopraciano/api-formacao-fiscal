@@ -4,20 +4,31 @@ interface
 
 uses
   System.SysUtils,
-  System.IniFiles,
   models.contracts;
 
 type
   TIde = class(TInterfacedObject, IIde)
   private
-    FIni: TIniFile;
+    Fmodelo: integer;
+    FnNF: String;
+    FcNF: String;
+    FdEmi: TDateTime;
+    FdSaiEnt: TDateTime;
+    FhSaiEnt: TDateTime;
+    FtpNF: integer;
+    FtpEmis: integer;
+    FtpAmb: integer;
+    FfinNFe: integer;
+    FtpImp: integer;
+    FindFinal: integer;
+    FindPres: integer;
+    FindIntermed: integer;
 
     constructor Create;
-    destructor Destroy; override;
   public
     class function New: IIde;
 
-    function modelo(Value: integer = 65): IIde; overload;
+    function modelo(Value: integer): IIde; overload;
     function modelo: integer; overload;
     function nNF(Value: String): IIde; overload;
     function nNF: String; overload;
@@ -53,113 +64,119 @@ implementation
 
 function TIde.cNF: String;
 begin
-  FIni.ReadString('IDE', 'cNF', Result);
+  Result := FcNF;
 end;
 
 constructor TIde.Create;
 begin
-  var LPath := IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0)))+'conf.ini';
-  FIni := TIniFile.Create(LPath);
+  Fmodelo := 0;
+  FnNF := '';
+  FcNF := '';
+  FdEmi := now;
+  FdSaiEnt := now;
+  FhSaiEnt := now;
+  FtpNF := 0;
+  FtpEmis := 0;
+  FtpAmb := 0;
+  FfinNFe := 0;
+  FtpImp := 0;
+  FindFinal := 0;
+  FindPres := 0;
+  FindIntermed := 0;
 end;
 
 function TIde.cNF(Value: String): IIde;
 begin
   Result := Self;
-  FIni.WriteString('IDE', 'cNF', Value);
+  FcNF := Value;
 end;
 
 function TIde.dEmi(Value: TDateTime): IIde;
 begin
   Result := Self;
-  FIni.WriteDateTime('IDE', 'dEmi', Value);
+  FdEmi := Value;
 end;
 
 function TIde.dEmi: TDateTime;
 begin
-  FIni.ReadDateTime('IDE', 'dEmi', Result);
-end;
-
-destructor TIde.Destroy;
-begin
-  FIni.Free;
-  inherited;
+  Result := FdEmi;
 end;
 
 function TIde.dSaiEnt(Value: TDateTime): IIde;
 begin
   Result := Self;
-  FIni.WriteDateTime('IDE', 'dSaiEnt', Value);
+  FdSaiEnt := Value;
 end;
 
 function TIde.dSaiEnt: TDateTime;
 begin
-  FIni.ReadDateTime('IDE', 'dSaiEnt', Result);
+  Result := FdSaiEnt;
 end;
 
 function TIde.finNFe: integer;
 begin
-  FIni.ReadInteger('IDE', 'finNFe', Result);
+  Result := FfinNFe;
 end;
 
 function TIde.finNFe(Value: integer): IIde;
 begin
   Result := Self;
-  FIni.WriteInteger('IDE', 'finNFe', Value);
+  FfinNFe := Value;
 end;
 
 function TIde.hSaiEnt(Value: TDateTime): IIde;
 begin
   Result := Self;
-  FIni.WriteDateTime('IDE', 'hSaiEnt', Value);
+  FhSaiEnt := Value;
 end;
 
 function TIde.hSaiEnt: TDateTime;
 begin
-  FIni.ReadDateTime('IDE', 'hSaiEnt', Result);
+  Result := FhSaiEnt;
 end;
 
 function TIde.indFinal: integer;
 begin
-  FIni.ReadInteger('IDE', 'indFinal', Result);
+  Result := FindFinal;
 end;
 
 function TIde.indFinal(Value: integer): IIde;
 begin
   Result := Self;
-  FIni.WriteInteger('IDE', 'indFinal', Value);
+  FindFinal := Value;
 end;
 
 function TIde.indIntermed(Value: integer): IIde;
 begin
   Result := Self;
-  FIni.WriteInteger('IDE', 'indIntermed', Value);
+  FindIntermed := Value;
 end;
 
 function TIde.indIntermed: integer;
 begin
-  FIni.ReadDateTime('IDE', 'indIntermed', Result);
+  Result := FindIntermed;
 end;
 
 function TIde.indPres(Value: integer): IIde;
 begin
   Result := Self;
-  FIni.WriteInteger('IDE', 'indPres', Value);
+  FindPres := Value;
 end;
 
 function TIde.indPres: integer;
 begin
-  FIni.ReadInteger('IDE', 'indPres', Result);
+  Result := FindPres;
 end;
 
 function TIde.modelo: integer;
 begin
-  Result := 65;//FIni.ReadInteger('IDE', 'modelo', Result);
+  Result := Fmodelo;
 end;
 
 function TIde.modelo(Value: integer): IIde;
 begin
   Result := Self;
-  FIni.WriteInteger('IDE', 'modelo', Value);
+  Fmodelo := Value;
 end;
 
 class function TIde.New: IIde;
@@ -169,57 +186,57 @@ end;
 
 function TIde.nNF: String;
 begin
-  Result := '123';//FIni.ReadString('IDE', 'nNF', Result);
+  Result := FnNF;
 end;
 
 function TIde.nNF(Value: String): IIde;
 begin
   Result := Self;
-  FIni.WriteString('IDE', 'nNF', Value);
+  FnNF := Value;
 end;
 
 function TIde.tpAmb: integer;
 begin
-  Result := 1;//FIni.ReadInteger('IDE', 'tpAmb', Result);
+  Result := FtpAmb;
 end;
 
 function TIde.tpAmb(Value: integer): IIde;
 begin
   Result := Self;
-  FIni.WriteInteger('IDE', 'tpAmb', Value);
+  FtpAmb := Value;
 end;
 
 function TIde.tpEmis(Value: integer): IIde;
 begin
   Result := Self;
-  FIni.WriteInteger('IDE', 'tpEmis', Value);
+  FtpEmis := Value;
 end;
 
 function TIde.tpEmis: integer;
 begin
-  Result := 1;//FIni.ReadInteger('IDE', 'tpEmis', Result);
+  Result := FtpEmis;
 end;
 
 function TIde.tpImp: integer;
 begin
-  FIni.ReadInteger('IDE', 'tpImp', Result);
+  Result := FtpImp;
 end;
 
 function TIde.tpImp(Value: integer): IIde;
 begin
   Result := Self;
-  FIni.WriteInteger('IDE', 'tpImp', Value);
+  FtpImp := Value;
 end;
 
 function TIde.tpNF: integer;
 begin
-  FIni.ReadInteger('IDE', 'tpNF', Result);
+  Result := FtpNF;
 end;
 
 function TIde.tpNF(Value: integer): IIde;
 begin
   Result := Self;
-  FIni.WriteInteger('IDE', 'tpNF', Value);
+  FtpNF := Value;
 end;
 
 end.

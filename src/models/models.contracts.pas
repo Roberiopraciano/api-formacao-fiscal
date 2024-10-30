@@ -2,9 +2,6 @@ unit models.contracts;
 
 interface
 
-uses
-  System.IniFiles;
-
 type
   IConfiguracoes = interface;
 
@@ -122,12 +119,11 @@ type
     function PathPDF: String; overload;
     function WebService: IWebService;
     function Arquivo: IArquivo;
-    function Infra: TIniFile;
   end;
 
   IIde = interface
     ['{7478B69D-4B2B-4DB5-B302-81187AD4F453}']
-    function modelo(Value: integer = 65): IIde; overload;
+    function modelo(Value: integer): IIde; overload;
     function modelo: integer; overload;
     function nNF(Value: String): IIde; overload;
     function nNF: String; overload;

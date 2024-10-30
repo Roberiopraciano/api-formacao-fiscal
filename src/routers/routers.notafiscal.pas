@@ -82,11 +82,7 @@ end;
 procedure TNotaFiscalHorseRouter.RegisterRouter;
 begin
   THorse
-    .Get('api/notafiscais/:id', Get)
-    .Get('api/notafiscais', GetAll)
-    .Post('api/notafiscais/emitir', Post)
-    .Put('api/notafiscais/:id', Put)
-    .Delete('api/notafiscais/:id', Delete);
+    .Post('api/notafiscais/emitir', Post);
 end;
 
 end.

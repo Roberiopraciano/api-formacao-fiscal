@@ -9,6 +9,12 @@ type
   TCertificado = class(TInterfacedObject, ICertificado)
   private
     FParent: IConfiguracoes;
+
+    FURL: String;
+    FCaminho: String;
+    FSenha: String;
+    FSerie: String;
+
     constructor Create(Parent: IConfiguracoes);
   public
     class function New(Parent: IConfiguracoes): ICertificado;
@@ -29,19 +35,21 @@ implementation
 
 function TCertificado.Caminho: String;
 begin
-  Result := '';
-//  FParent.Infra.ReadString('Certificado', 'Caminho', Result);
+  Result := FCaminho;
 end;
 
 function TCertificado.Caminho(Value: String): ICertificado;
 begin
   Result := Self;
-  FParent.Infra.WriteString('Certificado', 'Caminho', Value);
 end;
 
 constructor TCertificado.Create(Parent: IConfiguracoes);
 begin
   FParent := Parent;
+  FURL := '';
+  FCaminho := '';
+  FSenha := '';
+  FSerie := '';
 end;
 
 function TCertificado.&End: IConfiguracoes;
@@ -57,37 +65,34 @@ end;
 function TCertificado.Senha(Value: String): ICertificado;
 begin
   Result := Self;
-  FParent.Infra.WriteString('Certificado', 'Senha', Value);
+  FSenha := Value;
 end;
 
 function TCertificado.Senha: String;
 begin
-  Result := ''
-//  FParent.Infra.ReadString('Certificado', 'Senha', Result);
+  Result := FSenha;
 end;
 
 function TCertificado.Serie(Value: String): ICertificado;
 begin
   Result := Self;
-  FParent.Infra.WriteString('Certificado', 'Serie', Value);
+  FSerie := Value;
 end;
 
 function TCertificado.Serie: String;
 begin
-  Result := '';
-  //FParent.Infra.ReadString('Certificado', 'Serie', Result);
+  Result := FSerie;
 end;
 
 function TCertificado.URL(Value: String): ICertificado;
 begin
   Result := Self;
-  FParent.Infra.WriteString('Certificado', 'URL', Value);
+  FURL := Value;
 end;
 
 function TCertificado.URL: String;
 begin
-  Result := '';
-//  FParent.Infra.ReadString('Certificado', 'URL', Result);
+  Result := FURL;
 end;
 
 end.

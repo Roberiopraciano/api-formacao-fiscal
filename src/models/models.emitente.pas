@@ -3,17 +3,28 @@ unit models.emitente;
 interface
 
 uses
-  System.SysUtils,
-  System.IniFiles,
   models.contracts;
 
 type
   TEmitente = class(TInterfacedObject, IEmitente)
   private
-    FIni: TIniFile;
+    FCNPJCPF: String;
+    FIE: String;
+    FxNome: String;
+    FxFant: String;
+    Ffone: String;
+    FCEP: Integer;
+    FxLgr: String;
+    Fnro: String;
+    FxCpl: String;
+    FxBairro: String;
+    FxMun: String;
+    FcMun: Integer;
+    FUF: String;
+    FIEST: String;
+    FCRT: String;
 
     constructor Create;
-    destructor Destroy; override;
   public
     class function New: IEmitente;
 
@@ -55,91 +66,98 @@ implementation
 
 function TEmitente.CEP: Integer;
 begin
-  FIni.ReadInteger('EMITENTE', 'CEP', Result);
+  Result := FCEP;
 end;
 
 function TEmitente.cMun: Integer;
 begin
-  FIni.ReadInteger('EMITENTE', 'cMun', Result);
+  Result := FcMun;
 end;
 
 function TEmitente.cMun(Value: Integer): IEmitente;
 begin
   Result := Self;
-  FIni.WriteInteger('EMITENTE', 'cMun', Value);
+  FcMun := Value;
 end;
 
 function TEmitente.CEP(Value: Integer): IEmitente;
 begin
   Result := Self;
-  FIni.WriteInteger('EMITENTE', 'CEP', Value);
+  FCEP := Value;
 end;
 
 function TEmitente.CNPJCPF: String;
 begin
-  FIni.ReadString('EMITENTE', 'CNPJCPF', Result);
+  Result := FCNPJCPF;
 end;
 
 constructor TEmitente.Create;
 begin
-  var LPath := IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0)))+'conf.ini';
-  FIni := TIniFile.Create(LPath);
+  FCNPJCPF := '';
+  FIE := '';
+  FxNome := '';
+  FxFant := '';
+  Ffone := '';
+  FCEP := 0;
+  FxLgr := '';
+  Fnro := '';
+  FxCpl := '';
+  FxBairro := '';
+  FxMun := '';
+  FcMun := 0;
+  FUF := '';
+  FIEST := '';
+  FCRT := '';
 end;
 
 function TEmitente.CNPJCPF(Value: String): IEmitente;
 begin
   Result := Self;
-  FIni.WriteString('EMITENTE', 'CNPJCPF', Value);
+  FCNPJCPF := Value;
 end;
 
 function TEmitente.CRT: String;
 begin
-  FIni.ReadString('EMITENTE', 'CRT', Result);
-end;
-
-destructor TEmitente.Destroy;
-begin
-  FIni.Free;
-  inherited;
+  Result := FCRT;
 end;
 
 function TEmitente.CRT(Value: String): IEmitente;
 begin
   Result := Self;
-  FIni.WriteString('EMITENTE', 'CRT', Value);
+  FCRT := Value;
 end;
 
 function TEmitente.fone: String;
 begin
-  FIni.ReadString('EMITENTE', 'fone', Result);
+  Result := Ffone;
 end;
 
 function TEmitente.fone(Value: String): IEmitente;
 begin
   Result := Self;
-  FIni.WriteString('EMITENTE', 'fone', Value);
+  Ffone := Value;
 end;
 
 function TEmitente.IE: String;
 begin
-  FIni.ReadString('EMITENTE', 'IE', Result);
+  Result := FIE;
 end;
 
 function TEmitente.IE(Value: String): IEmitente;
 begin
   Result := Self;
-  FIni.WriteString('EMITENTE', 'IE', Value);
+  FIE := Value;
 end;
 
 function TEmitente.IEST: String;
 begin
-  FIni.ReadString('EMITENTE', 'IEST', Result);
+  Result := FIEST;
 end;
 
 function TEmitente.IEST(Value: String): IEmitente;
 begin
   Result := Self;
-  FIni.WriteString('EMITENTE', 'IEST', Value);
+  FIEST := Value;
 end;
 
 class function TEmitente.New: IEmitente;
@@ -149,90 +167,90 @@ end;
 
 function TEmitente.nro: String;
 begin
-  FIni.ReadString('EMITENTE', 'nro', Result);
+  Result := Fnro;
 end;
 
 function TEmitente.nro(Value: String): IEmitente;
 begin
   Result := Self;
-  FIni.WriteString('EMITENTE', 'nro', Value);
+  Fnro := Value;
 end;
 
 function TEmitente.UF: String;
 begin
-  FIni.ReadString('EMITENTE', 'UF', Result);
+  Result := FUF;
 end;
 
 function TEmitente.UF(Value: String): IEmitente;
 begin
   Result := Self;
-  FIni.WriteString('EMITENTE', 'UF', Value);
+  FUF := Value;
 end;
 
 function TEmitente.xBairro(Value: String): IEmitente;
 begin
   Result := Self;
-  FIni.WriteString('EMITENTE', 'xBairro', Value);
+  FxBairro := Value;
 end;
 
 function TEmitente.xBairro: String;
 begin
-  FIni.ReadString('EMITENTE', 'xBairro', Result);
+  Result := FxBairro;
 end;
 
 function TEmitente.xCpl(Value: String): IEmitente;
 begin
   Result := Self;
-  FIni.WriteString('EMITENTE', 'xCpl', Value);
+  FxCpl := Value;
 end;
 
 function TEmitente.xCpl: String;
 begin
-  FIni.ReadString('EMITENTE', 'xCpl', Result);
+  Result := FxCpl;
 end;
 
 function TEmitente.xFant(Value: String): IEmitente;
 begin
   Result := Self;
-  FIni.WriteString('EMITENTE', 'xFant', Value);
+  FxFant := Value;
 end;
 
 function TEmitente.xFant: String;
 begin
-  FIni.ReadString('EMITENTE', 'xFant', Result);
+  Result := FxFant;
 end;
 
 function TEmitente.xLgr(Value: String): IEmitente;
 begin
   Result := Self;
-  FIni.WriteString('EMITENTE', 'xLgr', Value);
+  FxLgr := Value;
 end;
 
 function TEmitente.xLgr: String;
 begin
-  FIni.ReadString('EMITENTE', 'xLgr', Result);
+  Result := FxLgr;
 end;
 
 function TEmitente.xMun: String;
 begin
-  FIni.ReadString('EMITENTE', 'xMun', Result);
+  Result := FxMun;
 end;
 
 function TEmitente.xMun(Value: String): IEmitente;
 begin
   Result := Self;
-  FIni.WriteString('EMITENTE', 'xMun', Value);
+  FxMun := Value;
 end;
 
 function TEmitente.xNome(Value: String): IEmitente;
 begin
   Result := Self;
-  FIni.WriteString('EMITENTE', 'xNome', Value);
+  FxNome := Value;
 end;
 
 function TEmitente.xNome: String;
 begin
-  FIni.ReadString('EMITENTE', 'xNome', Result);
+  Result := FxNome;
 end;
 
 end.

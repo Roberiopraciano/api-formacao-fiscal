@@ -22,12 +22,17 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-
+    [JSONProp('ide')]
     property ide: TIde read Fide write Fide;
+    [JSONProp('produto')]
     property produto: TObjectList<TProduto> read Fproduto write Fproduto;
+    [JSONProp('total')]
     property Total: TTotal read FTotal write FTotal;
+    [JSONProp('pagamento')]
     property pagamento: TObjectList<TPagamento> read Fpagamento write Fpagamento;
+    [JSONProp('infoAdcionais')]
     property InfAdic: TInfAdic read FInfAdic write FInfAdic;
+    [JSONProp('infIntermed')]
     property infIntermed: TinfIntermed read FinfIntermed write FinfIntermed;
   end;
 

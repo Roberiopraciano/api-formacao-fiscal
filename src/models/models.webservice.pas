@@ -10,6 +10,19 @@ type
   private
     FParent: IConfiguracoes;
 
+    FUF: String;
+    FAmbiente: Integer;
+    FVisualizar: Boolean;
+    FSalvar: Boolean;
+    FAjustaAguardaConsultaRet: Boolean;
+    FAguardarConsultaRet: Integer;
+    FTentativas: Integer;
+    FIntervaloTentativas: Integer;
+    FTimeOut: Integer;
+    FProxyHost: String;
+    FProxyPort: String;
+    FProxyUser: String;
+    FProxyPass: String;
 
     constructor Create(Parent: IConfiguracoes);
   public
@@ -50,41 +63,55 @@ implementation
 
 function TWebService.AguardarConsultaRet: Integer;
 begin
-  Result := 0;//FParent.Infra.ReadInteger('WebService', 'AguardarConsultaRet', Result);
+  Result := FAguardarConsultaRet;
 end;
 
 function TWebService.AguardarConsultaRet(Value: Integer): IWebService;
 begin
   Result := self;
-  FParent.Infra.WriteInteger('WebService', 'AguardarConsultaRet', Value);
+  FAguardarConsultaRet := Value;
 end;
 
 function TWebService.AjustaAguardaConsultaRet(
   Value: Boolean): IWebService;
 begin
   Result := Self;
-  FParent.Infra.WriteBool('WebService', 'AjustaAguardaConsultaRet', Value);
+  FAjustaAguardaConsultaRet := Value;
 end;
 
 function TWebService.AjustaAguardaConsultaRet: Boolean;
 begin
-  Result := false;//FParent.Infra.ReadBool('WebService', 'AjustaAguardaConsultaRet', Result);
+  Result := FAjustaAguardaConsultaRet;
 end;
 
 function TWebService.Ambiente(Value: Integer): IWebService;
 begin
   Result := Self;
-  FParent.Infra.WriteInteger('WebService', 'Ambiente', Value);
+  FAmbiente := Value;
 end;
 
 function TWebService.Ambiente: Integer;
 begin
-  Result := 0;//FParent.Infra.ReadInteger('WebService', 'Ambiente', Result);
+  Result := FAmbiente;
 end;
 
 constructor TWebService.Create(Parent: IConfiguracoes);
 begin
   FParent := Parent;
+
+  FUF := '';
+  FAmbiente := 0;
+  FVisualizar := False;
+  FSalvar := False;
+  FAjustaAguardaConsultaRet := False;
+  FAguardarConsultaRet := 0;
+  FTentativas := 0;
+  FIntervaloTentativas := 0;
+  FTimeOut := 0;
+  FProxyHost := '';
+  FProxyPort := '';
+  FProxyUser := '';
+  FProxyPass := '';
 end;
 
 function TWebService.&End: IConfiguracoes;
@@ -94,13 +121,13 @@ end;
 
 function TWebService.IntervaloTentativas: Integer;
 begin
-  Result := 0;//FParent.Infra.ReadInteger('WebService', 'IntervaloTentativas', Result);
+  Result := FTentativas;
 end;
 
 function TWebService.IntervaloTentativas(Value: Integer): IWebService;
 begin
   Result := Self;
-  FParent.Infra.WriteInteger('WebService', 'IntervaloTentativas', Value);
+  FTentativas := Value;
 end;
 
 class function TWebService.New(Parent: IConfiguracoes): IWebService;
@@ -110,101 +137,101 @@ end;
 
 function TWebService.ProxyHost: String;
 begin
-  Result := '';//FParent.Infra.ReadString('WebService', 'ProxyHost', Result);
+  Result := FProxyHost;
 end;
 
 function TWebService.ProxyHost(Value: String): IWebService;
 begin
   Result := Self;
-  FParent.Infra.WriteString('WebService', 'ProxyHost', Value);
+  FProxyHost := Value;
 end;
 
 function TWebService.ProxyPass: String;
 begin
-  Result := '';//FParent.Infra.ReadString('WebService', 'ProxyPass', Result);
+  Result := FProxyPass;
 end;
 
 function TWebService.ProxyPass(Value: String): IWebService;
 begin
   Result := Self;
-  FParent.Infra.WriteString('WebService', 'ProxyPass', Value);
+  FProxyPass := Value;
 end;
 
 function TWebService.ProxyPort: String;
 begin
-  FParent.Infra.ReadString('WebService', 'ProxyPort', Result);
+  Result := FProxyPort;
 end;
 
 function TWebService.ProxyPort(Value: String): IWebService;
 begin
   Result := Self;
-  FParent.Infra.WriteString('WebService', 'ProxyPort', Value);
+  FProxyPort := Value;
 end;
 
 function TWebService.ProxyUser(Value: String): IWebService;
 begin
   Result := Self;
-  FParent.Infra.WriteString('WebService', 'ProxyUser', Value);
+  FProxyUser := VAlue;
 end;
 
 function TWebService.ProxyUser: String;
 begin
-  Result := '';//FParent.Infra.ReadString('WebService', 'ProxyUser', Result);
+  Result := FProxyUser;
 end;
 
 function TWebService.Salvar: Boolean;
 begin
-  Result := False;//FParent.Infra.ReadBool('WebService', 'Salvar', Result);
+  Result := FSalvar;
 end;
 
 function TWebService.Salvar(Value: Boolean): IWebService;
 begin
   Result := Self;
-  FParent.Infra.WriteBool('WebService', 'Salvar', Value);
+  FSalvar := VAlue;
 end;
 
 function TWebService.Tentativas(Value: Integer): IWebService;
 begin
   Result := Self;
-  FParent.Infra.WriteInteger('WebService', 'Tentativas', Value);
+  FTentativas := Value;
 end;
 
 function TWebService.Tentativas: Integer;
 begin
-  Result := 5;//FParent.Infra.ReadInteger('WebService', 'Tentativas', Result);
+  Result := FTentativas;
 end;
 
 function TWebService.TimeOut(Value: Integer): IWebService;
 begin
   Result := Self;
-  FParent.Infra.WriteInteger('WebService', 'TimeOut', Value);
+  FTimeOut := Value;
 end;
 
 function TWebService.TimeOut: Integer;
 begin
-  Result := 5000;//FParent.Infra.ReadInteger('WebService', 'TimeOut', Result);
+  Result := FTimeOut;
 end;
 
 function TWebService.UF: String;
 begin
-  Result := 'SP';//FParent.Infra.ReadString('WebService', 'UF', Result);
+  Result := FUF;
 end;
 
 function TWebService.UF(Value: String): IWebService;
 begin
   Result := Self;
-  FParent.Infra.WriteString('WebService', 'UF', Value);
+  FUF := VAlue;
 end;
 
 function TWebService.Visualizar: Boolean;
 begin
-  Result := FAlse;//FParent.Infra.ReadBool('WebService', 'Visualizar', Result);
+  Result := FVisualizar;
 end;
 
 function TWebService.Visualizar(Value: Boolean): IWebService;
 begin
   Result := Self;
-  FParent.Infra.WriteBool('WebService', 'Visualizar', Value);
+  FVisualizar := VAlue;
 end;
 
 end.
